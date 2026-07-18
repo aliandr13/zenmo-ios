@@ -44,6 +44,19 @@ enum AccountType: String, Codable, CaseIterable, Sendable {
     }
 }
 
+struct AccountResponse: Codable, Identifiable, Sendable {
+    let id: String
+    let name: String
+    let type: AccountType
+    let currency: String
+    let creditLimit: Decimal?
+    let currentBalance: Decimal
+    let statementBalance: Decimal?
+    let paymentDueDay: Int?
+    let closingDay: Int?
+    let archived: Bool
+}
+
 // MARK: - Internal
 
 struct APIErrorBody: Decodable, Sendable {

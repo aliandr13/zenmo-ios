@@ -25,8 +25,7 @@ private struct MainTabView: View {
             .tabItem { Label("Dashboard", systemImage: "chart.bar.fill") }
 
             NavigationStack {
-                Text("Accounts — coming soon")
-                    .navigationTitle("Accounts")
+                AccountsView()
             }
             .tabItem { Label("Accounts", systemImage: "creditcard.fill") }
 
