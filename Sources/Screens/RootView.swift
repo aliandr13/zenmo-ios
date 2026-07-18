@@ -30,8 +30,7 @@ private struct MainTabView: View {
             .tabItem { Label("Accounts", systemImage: "creditcard.fill") }
 
             NavigationStack {
-                Text("Transactions — coming soon")
-                    .navigationTitle("Transactions")
+                TransactionsView()
             }
             .tabItem { Label("Transactions", systemImage: "arrow.left.arrow.right") }
 
