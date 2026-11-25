@@ -18,38 +18,56 @@ xcodegen generate
 open ZenmoApp.xcodeproj
 ```
 
+`project.yml` is the XcodeGen spec — the `.xcodeproj` is generated and not committed.
+
 ## Project structure
 
 ```
 Sources/
-├── ZenmoApp.swift          # App entry point
+├── ZenmoApp.swift                # App entry point
 ├── Models/
-│   └── APITypes.swift      # Codable types mirroring the REST API
+│   └── APITypes.swift            # Codable types mirroring the REST API
 ├── API/
-│   ├── APIClient.swift     # URLSession wrapper, JWT refresh, actor-isolated
-│   └── AuthAPI.swift       # login / register / me
+│   ├── APIClient.swift           # URLSession wrapper, JWT refresh, actor-isolated
+│   ├── AuthAPI.swift             # login / register / me
+│   ├── AccountsAPI.swift         # accounts endpoints
+│   ├── TransactionsAPI.swift     # transactions endpoints (paged list, create, delete)
+│   └── CategoriesAPI.swift       # categories endpoints
 ├── Auth/
-│   ├── AuthStore.swift     # Session state (@MainActor ObservableObject)
-│   └── KeychainService.swift
+│   ├── AuthStore.swift           # Session state (@MainActor ObservableObject)
+│   └── KeychainService.swift     # Token persistence in the Keychain
 └── Screens/
-    ├── RootView.swift      # Auth gate → TabView
+    ├── RootView.swift            # Auth gate → TabView (+ Settings tab)
     ├── Login/
-    └── Register/
+    ├── Register/
+    ├── Accounts/
+    │   └── AccountsView.swift
+    └── Transactions/
+        └── TransactionsView.swift
 ```
-
-`project.yml` is the XcodeGen spec — the `.xcodeproj` is generated and not committed.
 
 ## API
 
-Points to `http://localhost:8080` in debug builds and `https://zenmo.fyi` in release. Change `baseURL` in `APIClient.swift` if needed.
+Points to `http://localhost:8080` in debug builds and `https://zenmo.fyi` in release. Change `baseURL` in
+`APIClient.swift` if needed.
+
+## Features
+
+- **Login / Register** — email + password; tokens are stored in the Keychain so the session survives app restarts.
+- **Accounts** — accounts grouped into *Credit*, *Checking & Cash*, and *Savings* sections, showing current
+  balance and, for credit cards with a limit, utilization. Pull to refresh.
+- **Transactions** — infinite-scroll list (loads the next page as you scroll), pull to refresh, swipe to delete,
+  and an *Add transaction* form (account, category, date, amount, currency, description, status, merchant, notes).
+- **Settings** — shows the signed-in email and a *Log out* button.
 
 ## Status
 
-| Screen | Status |
-|---|---|
-| Login | Done |
-| Register | Done |
-| Dashboard | Planned |
-| Accounts | Planned |
-| Transactions | Planned |
-| Categories | Planned |
+| Screen       | Status  |
+|--------------|---------|
+| Login        | Done    |
+| Register     | Done    |
+| Accounts     | Done (read-only list) |
+| Transactions | Done (list, add, delete) |
+| Settings     | Done    |
+| Dashboard    | Planned (placeholder tab) |
+| Categories   | Planned (placeholder tab; categories are already loaded for the transaction form) |
