@@ -103,7 +103,8 @@ private struct AccountRow: View {
     }
 
     private func utilization(balance: Decimal, limit: Decimal) -> String {
-        let ratio = (balance / limit) as NSDecimalNumber
+        // Credit balances are negative when money is owed (-200 = 200 owed), so owed = -balance.
+        let ratio = (-balance / limit) as NSDecimalNumber
         let formatter = NumberFormatter()
         formatter.numberStyle = .percent
         formatter.maximumFractionDigits = 1
