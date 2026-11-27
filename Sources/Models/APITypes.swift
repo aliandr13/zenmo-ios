@@ -88,10 +88,9 @@ struct TxnResponse: Codable, Identifiable, Sendable {
     let postDate: String?
     let amount: Decimal
     let currency: String
-    let description: String
+    let description: String?
     let merchant: String?
     let status: TxnStatus
-    let notes: String?
 }
 
 struct TxnRequest: Codable, Sendable {
@@ -101,10 +100,9 @@ struct TxnRequest: Codable, Sendable {
     let postDate: String?
     let amount: Decimal
     let currency: String
-    let description: String
+    let description: String?
     let merchant: String?
     let status: TxnStatus
-    let notes: String?
 }
 
 struct PageTxnResponse: Codable, Sendable {
