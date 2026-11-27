@@ -57,7 +57,7 @@ Points to `http://localhost:8080` in debug builds and `https://zenmo.fyi` in rel
 - **Accounts** — accounts grouped into *Credit*, *Checking & Cash*, and *Savings* sections, showing current
   balance and, for credit cards with a limit, utilization. Pull to refresh.
 - **Transactions** — infinite-scroll list (loads the next page as you scroll), pull to refresh, swipe to delete,
-  and an *Add transaction* form (account, category, date, amount, currency, description, status, merchant, notes).
+  and an *Add transaction* form (account, category, date, amount, currency, optional description, status, merchant).
   The amount is signed (negative = expense, positive = income); posted transactions update the account balance on the
   server, and the currency must match the account's.
 - **Settings** — shows the signed-in email and a *Log out* button.

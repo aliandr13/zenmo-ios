@@ -175,7 +175,7 @@ private struct TransactionRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text(txn.description)
+                Text(txn.description ?? "—")
                 Spacer()
                 Text(formattedMoney(txn.amount, currency: txn.currency))
                     .font(.body.weight(.medium))
@@ -232,7 +232,6 @@ private struct AddTransactionView: View {
     @State private var description = ""
     @State private var status: TxnStatus = .posted
     @State private var merchant = ""
-    @State private var notes = ""
     @State private var errorMessage: String?
     @State private var submitting = false
 
@@ -257,7 +256,7 @@ private struct AddTransactionView: View {
                         .keyboardType(.decimalPad)
                     TextField("Currency", text: $currency)
                         .textInputAutocapitalization(.characters)
-                    TextField("Description", text: $description)
+                    TextField("Description (optional)", text: $description)
                     Picker("Status", selection: $status) {
                         ForEach(TxnStatus.allCases, id: \.self) { status in
                             Text(status.displayName).tag(status)
@@ -265,7 +264,6 @@ private struct AddTransactionView: View {
                     }
                     .pickerStyle(.segmented)
                     TextField("Merchant (optional)", text: $merchant)
-                    TextField("Notes (optional)", text: $notes)
                 }
 
                 if let errorMessage {
@@ -298,10 +296,7 @@ private struct AddTransactionView: View {
             errorMessage = "Enter a valid amount"
             return
         }
-        guard !description.trimmingCharacters(in: .whitespaces).isEmpty else {
-            errorMessage = "Description is required"
-            return
-        }
+        let trimmedDescription = description.trimmingCharacters(in: .whitespaces)
         submitting = true
         errorMessage = nil
         let request = TxnRequest(
@@ -311,10 +306,9 @@ private struct AddTransactionView: View {
             postDate: nil,
             amount: amount,
             currency: currency,
-            description: description,
+            description: trimmedDescription.isEmpty ? nil : trimmedDescription,
             merchant: merchant.isEmpty ? nil : merchant,
-            status: status,
-            notes: notes.isEmpty ? nil : notes
+            status: status
         )
         do {
             _ = try await TransactionsAPI.create(request)
